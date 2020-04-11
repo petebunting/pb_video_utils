@@ -3,6 +3,7 @@
 import subprocess
 import shlex
 import json
+import os
 
 VIDEO_EXTS = ['.mp4', '.m4p', '.m4v', '.webm', '.mpg', '.mp2', '.mpeg', '.mpe', '.mpv', '.ogg', '.wmv', '.mov', '.qt', '.avi', '.flv', '.swf', '.avchd']
 
@@ -81,3 +82,41 @@ def get_video_params(video_file):
             video_params['fps'] = float(video_params['frames']) / float(video_params['duration_seconds'])
     
     return video_params
+
+
+def get_file_basename(filepath, checkvalid=False, n_comps=0):
+    """
+    Uses os.path module to return file basename (i.e., path and extension removed)
+
+    :param filepath: string for the input file name and path
+    :param checkvalid: if True then resulting basename will be checked for punctuation
+                       characters (other than underscores) and spaces, punctuation
+                       will be either removed and spaces changed to an underscore.
+                       (Default = False)
+    :param n_comps: if > 0 then the resulting basename will be split using underscores
+                    and the return based name will be defined using the n_comps
+                    components split by under scores.
+    :return: basename for file
+
+    """
+    import string
+    basename = os.path.splitext(os.path.basename(filepath))[0]
+    if checkvalid:
+        basename = basename.replace(' ', '_')
+        while '__' in basename:
+            basename = basename.replace('__', '_')
+        for punct in string.punctuation:
+            if (punct != '_') and (punct != '-'):
+                basename = basename.replace(punct, '')
+    if n_comps > 0:
+        basename_split = basename.split('_')
+        if len(basename_split) < n_comps:
+            raise Exception("The number of components specified is more than the number of components in the basename.")
+        out_basename = ""
+        for i in range(n_comps):
+            if i == 0:
+                out_basename = basename_split[i]
+            else:
+                out_basename = out_basename + '_' + basename_split[i]
+        basename = out_basename
+    return basename

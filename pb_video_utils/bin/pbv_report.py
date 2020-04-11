@@ -59,7 +59,7 @@ def report_dir_videos(input_dir):
                 report_video_file(input_file)
             else:
                 not_video_files.append(input_file)
-    print("The following Files where no videos:")
+    print("The following where not videos files:")
     for input_file in not_video_files:
         print("\t{}".format(input_file))
 

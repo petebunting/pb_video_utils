@@ -35,6 +35,7 @@ def rescale_file(input_file, output_file):
         raise Exception("The video paramaters could not be found...")
     print("\n\n")
 
+
 def rescale_dir_videos(input_dir, output_dir):
     input_files = os.listdir(input_dir)
     for input_file in input_files:
@@ -42,7 +43,7 @@ def rescale_dir_videos(input_dir, output_dir):
         if os.path.isfile(input_file):
             file_ext = os.path.splitext(input_file)[1]
             if file_ext.lower() in pbv_utils.VIDEO_EXTS:
-                basename = os.path.splitext(os.path.basename(input_file))[0]
+                basename = pbv_utils.get_file_basename(input_file, checkvalid=True)
                 output_file = os.path.join(output_dir, "{}.mp4".format(basename))
                 rescale_file(input_file, output_file)
 
