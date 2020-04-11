@@ -6,7 +6,8 @@ import pprint
 import subprocess
 from pb_video_utils import pbv_utils
 
-def rescale_file(input_file, output_file):
+
+def norm_video_1080(input_file, output_file):
     video_params = pbv_utils.get_video_params(input_file)
     pprint.pprint(video_params)
     if video_params is not None:
@@ -33,7 +34,7 @@ def rescale_file(input_file, output_file):
     print("\n\n")
 
 
-def rescale_dir_videos(input_dir, output_dir):
+def norm_dir_videos_1080(input_dir, output_dir, replace=False):
     input_files = os.listdir(input_dir)
     for input_file in input_files:
         input_file = os.path.join(input_dir, input_file)
@@ -42,24 +43,28 @@ def rescale_dir_videos(input_dir, output_dir):
             if file_ext.lower() in pbv_utils.VIDEO_EXTS:
                 basename = pbv_utils.get_file_basename(input_file, checkvalid=True)
                 output_file = os.path.join(output_dir, "{}.mp4".format(basename))
-                rescale_file(input_file, output_file)
+                if (not os.path.exists(output_file)) or replace:
+                    norm_video_1080(input_file, output_file)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", type=str, required=True, help="Input file or directory.")
     parser.add_argument("-o", "--output", type=str, required=True, help="Output file or directory.")
+    parser.add_argument("-r", "--replace", action='store_true', default=False,
+                        help='''Specify that output files are to be replaced.''')
     
     args = parser.parse_args()
     
     if os.path.isfile(args.input):
         if os.path.isdir(args.output):
             raise Exception("The output must be a file as the input is a file.")
-        rescale_file(args.input, args.output)
+        if (not os.path.exists(args.output)) or args.replace:
+            norm_video_1080(args.input, args.output)
     elif os.path.isdir(args.input):
         if not os.path.isdir(args.output):
             raise Exception("The output must be a directory as the input is a directory.")
-        rescale_dir_videos(args.input, args.output)
+        norm_dir_videos_1080(args.input, args.output, args.replace)
     else:
         raise Exception("Input is neither a file or directory...")
 
