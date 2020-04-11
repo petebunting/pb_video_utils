@@ -16,15 +16,16 @@ def norm_video_1080(input_file, output_file):
             print(input_file)
             if (video_params['frame_width'] == 1920) and (video_params['frame_height'] == 1080) and ((video_params['rotation'] == 0) or (video_params['rotation'] == 180)):
                 print("Export Video without rescaling...")
-                cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -filter:v fps=fps=30 "{}"'.format(input_file, output_file)
+                cmd = 'ffmpeg -y -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -filter:v fps=fps=30 "{}"'.format(input_file, output_file)
             elif (video_params['frame_height'] > video_params['frame_width']) or ((video_params['rotation'] != 0) and (video_params['rotation'] != 180)):
                 print("Portrait Video - needs padding")
+                cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -filter_complex \'[0:v]scale=1920:1080:-1,boxblur=luma_radius=min(h\,w)/20:luma_power=1:chroma_radius=min(cw\,ch)/20:chroma_power=1[bg];[bg][0:v]overlay=(W-w)/2:(H-h)/2,crop=h=iw*9/16, fps=fps=30\' "{}"'.format(input_file, output_file)
             elif (video_params['frame_height'] < 1080) and ((video_params['rotation'] == 0) or (video_params['rotation'] == 180)):
                 print("Upscale")
-                cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -vf "scale=1920x1080:flags=lanczos, fps=fps=30" "{}"'.format(input_file, output_file)
+                cmd = 'ffmpeg -y -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -vf "scale=1920x1080:flags=lanczos, fps=fps=30" "{}"'.format(input_file, output_file)
             elif (video_params['frame_height'] > 1080) and ((video_params['rotation'] == 0) or (video_params['rotation'] == 180)):
                 print("Downscale")
-                cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -vf "scale=1920x1080:flags=lanczos, fps=fps=30" "{}"'.format(input_file, output_file)
+                cmd = 'ffmpeg -y -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -vf "scale=1920x1080:flags=lanczos, fps=fps=30" "{}"'.format(input_file, output_file)
             else:
                 raise Exception("Do not know what to do with input file: '{}'".format(input_file))
             if cmd is not None:

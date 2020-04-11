@@ -8,7 +8,7 @@ from distutils.core import setup
 import os
 
 setup(name='pb_video_utils',
-    version='0.0.1',
+    version='1.0.0',
     description='A tool for automating some video utilties.',
     author='Pete Bunting',
     author_email='petebunting@mac.com',
