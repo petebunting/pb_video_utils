@@ -12,8 +12,7 @@ def report_video_file(input_file):
         print("\t Size ({}, {})".format(video_params['frame_width'], video_params['frame_height']))
         if (video_params['frame_height'] > video_params['frame_width']) or ((video_params['rotation'] != 0) and (video_params['rotation'] != 180)):
             print("\t\tRotation: {}".format(video_params['rotation']))
-            print("\t\t**This is portrait video** - you need to manually edit this one.")
-            """
+            print("\t\t**This is portrait video** - you might want to manually edit this one.")
             if (video_params['frame_height'] == 1080) and (video_params['frame_width'] == 1920):
                 print("\t\t\t*Automated Fix Possible* - this video is the correct size (1080).")
             elif (video_params['frame_height'] == 720) and (video_params['frame_width'] == 1280):
@@ -31,8 +30,7 @@ def report_video_file(input_file):
             elif (video_params['frame_height'] == 3840) and (video_params['frame_width'] == 2160):
                 print("\t\t\t*Automated Fix Possible* - this video is large (4k).")
             else:
-                print("\t\t\t**Manual Fix Required** - do not recognise the size of this video.")
-            """
+                print("\t\t\t**Manual Fix Required** - do not recognise the size of this video but will try a automated fix.")
         else:
             if (video_params['frame_height'] == 1080) and (video_params['frame_width'] == 1920):
                 print("\t\t*Good* - this video is the correct size (1080).")
