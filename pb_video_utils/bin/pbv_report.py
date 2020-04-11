@@ -6,48 +6,51 @@ import argparse
 from pb_video_utils import pbv_utils
 
 def report_video_file(input_file):
-    video_params = pbv_utils.get_video_params(input_file)
     print("Video: {}".format(input_file))
-    print("\t Size ({}, {})".format(video_params['frame_width'], video_params['frame_height']))
-    if (video_params['frame_height'] > video_params['frame_width']) or ((video_params['rotation'] != 0) and (video_params['rotation'] != 180)):
-        print("\t\tRotation: {}".format(video_params['rotation']))
-        print("\t\t**This is portrait video** - you need to manually edit this one.")
-        """
-        if (video_params['frame_height'] == 1080) and (video_params['frame_width'] == 1920):
-            print("\t\t\t*Automated Fix Possible* - this video is the correct size (1080).")
-        elif (video_params['frame_height'] == 720) and (video_params['frame_width'] == 1280):
-            print("\t\t\t*Automated Fix Possible* - this video is small (720).")
-        elif (video_params['frame_height'] == 2160) and (video_params['frame_width'] == 4096):
-            print("\t\t\t*Automated Fix Possible* - this video is large (4k).")
-        elif (video_params['frame_height'] == 2160) and (video_params['frame_width'] == 3840):
-            print("\t\t\t*Automated Fix Possible* - this video is large (4k).")
-        elif (video_params['frame_height'] == 1920) and (video_params['frame_width'] == 1080):
-            print("\t\t\t*Automated Fix Possible* - this video is the correct size (1080).")
-        elif (video_params['frame_height'] == 1280) and (video_params['frame_width'] == 720):
-            print("\t\t\t*Automated Fix Possible* - this video is small (720).")
-        elif (video_params['frame_height'] == 4096) and (video_params['frame_width'] == 2160):
-            print("\t\t\t*Automated Fix Possible* - this video is large (4k).")
-        elif (video_params['frame_height'] == 3840) and (video_params['frame_width'] == 2160):
-            print("\t\t\t*Automated Fix Possible* - this video is large (4k).")
+    try:
+        video_params = pbv_utils.get_video_params(input_file)
+        print("\t Size ({}, {})".format(video_params['frame_width'], video_params['frame_height']))
+        if (video_params['frame_height'] > video_params['frame_width']) or ((video_params['rotation'] != 0) and (video_params['rotation'] != 180)):
+            print("\t\tRotation: {}".format(video_params['rotation']))
+            print("\t\t**This is portrait video** - you need to manually edit this one.")
+            """
+            if (video_params['frame_height'] == 1080) and (video_params['frame_width'] == 1920):
+                print("\t\t\t*Automated Fix Possible* - this video is the correct size (1080).")
+            elif (video_params['frame_height'] == 720) and (video_params['frame_width'] == 1280):
+                print("\t\t\t*Automated Fix Possible* - this video is small (720).")
+            elif (video_params['frame_height'] == 2160) and (video_params['frame_width'] == 4096):
+                print("\t\t\t*Automated Fix Possible* - this video is large (4k).")
+            elif (video_params['frame_height'] == 2160) and (video_params['frame_width'] == 3840):
+                print("\t\t\t*Automated Fix Possible* - this video is large (4k).")
+            elif (video_params['frame_height'] == 1920) and (video_params['frame_width'] == 1080):
+                print("\t\t\t*Automated Fix Possible* - this video is the correct size (1080).")
+            elif (video_params['frame_height'] == 1280) and (video_params['frame_width'] == 720):
+                print("\t\t\t*Automated Fix Possible* - this video is small (720).")
+            elif (video_params['frame_height'] == 4096) and (video_params['frame_width'] == 2160):
+                print("\t\t\t*Automated Fix Possible* - this video is large (4k).")
+            elif (video_params['frame_height'] == 3840) and (video_params['frame_width'] == 2160):
+                print("\t\t\t*Automated Fix Possible* - this video is large (4k).")
+            else:
+                print("\t\t\t**Manual Fix Required** - do not recognise the size of this video.")
+            """
         else:
-            print("\t\t\t**Manual Fix Required** - do not recognise the size of this video.")
-        """
-    else:
-        if (video_params['frame_height'] == 1080) and (video_params['frame_width'] == 1920):
-            print("\t\t*Good* - this video is the correct size (1080).")
-        elif (video_params['frame_height'] == 720) and (video_params['frame_width'] == 1280):
-            print("\t\t*Automated Fix* - this video is small (720).")
-        elif (video_params['frame_height'] == 2160) and (video_params['frame_width'] == 4096):
-            print("\t\t*Automated Fix* - this video is large (4k).")
-        elif (video_params['frame_height'] == 2160) and (video_params['frame_width'] == 3840):
-            print("\t\t*Automated Fix* - this video is large (4k).")
+            if (video_params['frame_height'] == 1080) and (video_params['frame_width'] == 1920):
+                print("\t\t*Good* - this video is the correct size (1080).")
+            elif (video_params['frame_height'] == 720) and (video_params['frame_width'] == 1280):
+                print("\t\t*Automated Fix* - this video is small (720).")
+            elif (video_params['frame_height'] == 2160) and (video_params['frame_width'] == 4096):
+                print("\t\t*Automated Fix* - this video is large (4k).")
+            elif (video_params['frame_height'] == 2160) and (video_params['frame_width'] == 3840):
+                print("\t\t*Automated Fix* - this video is large (4k).")
+            else:
+                print("\t\t**Manual Fix Required** - do not recognise the size of this video.")
+        print("\t FPS: {}".format(video_params['fps']))
+        if (video_params['fps'] > 25) and (video_params['fps'] < 31):
+            print("\t\t*Good* - frame rate is within normal bounds.")
         else:
-            print("\t\t**Manual Fix Required** - do not recognise the size of this video.")
-    print("\t FPS: {}".format(video_params['fps']))
-    if (video_params['fps'] > 25) and (video_params['fps'] < 31):
-        print("\t\t*Good* - frame rate is within normal bounds.")
-    else:
-        print("\t\t*Automated Fix* - this frame rate is expected to be about 30.")
+            print("\t\t*Automated Fix* - this frame rate is expected to be about 30.")
+    except Exception:
+        print("\t***File Failed***")
     print("")
 
 def report_dir_videos(input_dir):

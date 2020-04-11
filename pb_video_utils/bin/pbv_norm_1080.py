@@ -8,29 +8,32 @@ from pb_video_utils import pbv_utils
 
 
 def norm_video_1080(input_file, output_file):
-    video_params = pbv_utils.get_video_params(input_file)
-    pprint.pprint(video_params)
-    if video_params is not None:
-        cmd = None
-        print(input_file)
-        if (video_params['frame_width'] == 1920) and (video_params['frame_height'] == 1080) and ((video_params['rotation'] == 0) or (video_params['rotation'] == 180)):
-            print("Export Video without rescaling...")
-            cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -filter:v fps=fps=30 "{}"'.format(input_file, output_file)
-        elif (video_params['frame_height'] > video_params['frame_width']) or ((video_params['rotation'] != 0) and (video_params['rotation'] != 180)):
-            print("Portrait Video - needs padding")
-        elif (video_params['frame_height'] < 1080) and ((video_params['rotation'] == 0) or (video_params['rotation'] == 180)):
-            print("Upscale")
-            cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -filter:v fps=fps=30 -vf scale=1920x1080:flags=lanczos "{}"'.format(input_file, output_file)
-        elif (video_params['frame_height'] > 1080) and ((video_params['rotation'] == 0) or (video_params['rotation'] == 180)):
-            print("Downscale")
-            cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -filter:v fps=fps=30 -vf scale=1920x1080:flags=lanczos "{}"'.format(input_file, output_file)
+    try:
+        video_params = pbv_utils.get_video_params(input_file)
+        pprint.pprint(video_params)
+        if video_params is not None:
+            cmd = None
+            print(input_file)
+            if (video_params['frame_width'] == 1920) and (video_params['frame_height'] == 1080) and ((video_params['rotation'] == 0) or (video_params['rotation'] == 180)):
+                print("Export Video without rescaling...")
+                cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -filter:v fps=fps=30 "{}"'.format(input_file, output_file)
+            elif (video_params['frame_height'] > video_params['frame_width']) or ((video_params['rotation'] != 0) and (video_params['rotation'] != 180)):
+                print("Portrait Video - needs padding")
+            elif (video_params['frame_height'] < 1080) and ((video_params['rotation'] == 0) or (video_params['rotation'] == 180)):
+                print("Upscale")
+                cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -filter:v fps=fps=30 -vf scale=1920x1080:flags=lanczos "{}"'.format(input_file, output_file)
+            elif (video_params['frame_height'] > 1080) and ((video_params['rotation'] == 0) or (video_params['rotation'] == 180)):
+                print("Downscale")
+                cmd = 'ffmpeg -i "{}" -c:v libx265 -preset medium -crf 20 -tag:v hvc1 -c:a aac -b:a 224k -b:v 16M -filter:v fps=fps=30 -vf scale=1920x1080:flags=lanczos "{}"'.format(input_file, output_file)
+            else:
+                raise Exception("Do not know what to do with input file: '{}'".format(input_file))
+            if cmd is not None:
+                print(cmd)
+                subprocess.call(cmd, shell=True)
         else:
-            raise Exception("Do not know what to do with input file: '{}'".format(input_file))
-        if cmd is not None:
-            print(cmd)
-            subprocess.call(cmd, shell=True)
-    else:
-        raise Exception("The video paramaters could not be found...")
+            raise Exception("The video paramaters could not be found...")
+    except Exception:
+        print("Could not open file: '{}'".format(input_file))
     print("\n\n")
 
 
@@ -53,7 +56,6 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", type=str, required=True, help="Output file or directory.")
     parser.add_argument("-r", "--replace", action='store_true', default=False,
                         help='''Specify that output files are to be replaced.''')
-    
     args = parser.parse_args()
     
     if os.path.isfile(args.input):
