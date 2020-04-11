@@ -12,10 +12,9 @@ RUN apt-get update --fix-missing && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf /usr/bin/python3 /usr/bin/python
 
-COPY pb_video_utils .
-
 RUN mkdir -p /opt/pb_video_utils
 WORKDIR /opt/pb_video_utils
+COPY point_file /opt
 COPY pb_video_utils /opt/pb_video_utils
 RUN python3 ./setup.py install
 
