@@ -11,11 +11,11 @@ RUN apt-get update --fix-missing && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+COPY pb_video_utils .
 
-RUN mkdir -p /opt/pb_video_tools/bin && \
-    mkdir -p /opt/pb_video_tools/bin
-COPY rescale_videos.py /usr/local/bin
-RUN chmod a+x /usr/local/bin/rescale_videos.py
+RUN mkdir -p /opt/pb_video_utils
+WORKDIR /opt/pb_video_utils
+COPY pb_video_utils /opt/pb_video_utils
 
 # Add Tini
 ENV TINI_VERSION v0.18.0
