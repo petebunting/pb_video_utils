@@ -84,7 +84,7 @@ def get_video_params(video_file):
     return video_params
 
 
-def get_file_basename(filepath, checkvalid=False, n_comps=0):
+def get_file_basename(filepath, checkvalid=False, lowercase=False, n_comps=0):
     """
     Uses os.path module to return file basename (i.e., path and extension removed)
 
@@ -108,6 +108,8 @@ def get_file_basename(filepath, checkvalid=False, n_comps=0):
         for punct in string.punctuation:
             if (punct != '_') and (punct != '-'):
                 basename = basename.replace(punct, '')
+    if lowercase:
+        basename = basename.lower()
     if n_comps > 0:
         basename_split = basename.split('_')
         if len(basename_split) < n_comps:
