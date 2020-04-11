@@ -3,11 +3,10 @@
 import os
 import argparse
 
-from pb_video_utils/pbv_utils import VIDEO_EXTS
-from pb_video_utils/pbv_utils import get_video_params
+from pb_video_utils import pbv_utils
 
 def report_video_file(input_file):
-    video_params = get_video_params(input_file)
+    video_params = pbv_utils.get_video_params(input_file)
     print("Video: {}".format(input_file))
     print("\t Size ({}, {})".format(video_params['frame_width'], video_params['frame_height']))
     if (video_params['frame_height'] > video_params['frame_width']) or ((video_params['rotation'] != 0) and (video_params['rotation'] != 180)):
@@ -55,7 +54,7 @@ def report_dir_videos(input_dir):
         input_file = os.path.join(input_dir, input_file)
         if os.path.isfile(input_file):
             file_ext = os.path.splitext(input_file)[1]
-            if file_ext.lower() in VIDEO_EXTS:
+            if file_ext.lower() in pbv_utils.VIDEO_EXTS:
                 report_video_file(input_file)
             else:
                 print("** NOT a Video file: {} **\n".format(input_file))

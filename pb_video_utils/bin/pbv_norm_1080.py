@@ -4,11 +4,10 @@ import os
 import argparse
 import pprint
 
-from pb_video_utils/pbv_utils import VIDEO_EXTS
-from pb_video_utils/pbv_utils import get_video_params
+from pb_video_utils import pbv_utils
 
 def rescale_file(input_file, output_file):
-    video_params = get_video_params(input_file)
+    video_params = pbv_utils.get_video_params(input_file)
     pprint.pprint(video_params)
     if video_params is not None:
         cmd = None
@@ -42,7 +41,7 @@ def rescale_dir_videos(input_dir, output_dir):
         input_file = os.path.join(input_dir, input_file)
         if os.path.isfile(input_file):
             file_ext = os.path.splitext(input_file)[1]
-            if file_ext.lower() in VIDEO_EXTS:
+            if file_ext.lower() in pbv_utils.VIDEO_EXTS:
                 basename = os.path.splitext(os.path.basename(input_file))[0]
                 output_file = os.path.join(output_dir, "{}.mp4".format(basename))
                 rescale_file(input_file, output_file)
