@@ -9,8 +9,8 @@ ENV PATH /opt/miniconda/bin:$PATH
 RUN apt-get update --fix-missing && \
     apt-get install -y apt-utils wget bzip2 curl git binutils vim imagemagick ffmpeg python3 python3-pip && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* \
-    RUN ln -sf /usr/bin/python3 /usr/bin/python
+    rm -rf /var/lib/apt/lists/* && \
+    ln -sf /usr/bin/python3 /usr/bin/python
 
 COPY pb_video_utils .
 
